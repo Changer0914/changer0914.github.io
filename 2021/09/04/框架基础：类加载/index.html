@@ -17,8 +17,9 @@
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182014881.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182442624.png">
 <meta property="article:published_time" content="2021-09-04T10:16:49.000Z">
-<meta property="article:modified_time" content="2021-09-04T12:37:11.809Z">
+<meta property="article:modified_time" content="2021-09-10T10:33:21.352Z">
 <meta property="article:author" content="dashuai">
+<meta property="article:tag" content="框架基础">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://www.dotoday.cn/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/field-6574455_960_720.jpg">
   
@@ -187,9 +188,13 @@
 <h2 id="1-知识体系"><a href="#1-知识体系" class="headerlink" title="1 知识体系"></a>1 知识体系</h2><p><img src="/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182014881.png" alt="image-20210904182014881"></p>
 <h2 id="2-问题"><a href="#2-问题" class="headerlink" title="2 问题"></a>2 问题</h2><h3 id="2-1-什么是类加载？"><a href="#2-1-什么是类加载？" class="headerlink" title="2.1 什么是类加载？"></a>2.1 什么是类加载？</h3><h3 id="2-2-有哪些类加载器？"><a href="#2-2-有哪些类加载器？" class="headerlink" title="2.2 有哪些类加载器？"></a>2.2 有哪些类加载器？</h3><img src="/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182442624.png" alt="image-20210904182442624" style="zoom:50%;">
 
-<h3 id="2-3-什么是双亲委派？Tomcat如何打破？"><a href="#2-3-什么是双亲委派？Tomcat如何打破？" class="headerlink" title="2.3 什么是双亲委派？Tomcat如何打破？"></a>2.3 什么是双亲委派？Tomcat如何打破？</h3><h3 id="2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？"><a href="#2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？" class="headerlink" title="2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？"></a>2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？</h3><h3 id="2-5-操作字节码有哪些技术？在什么场景下会用到？"><a href="#2-5-操作字节码有哪些技术？在什么场景下会用到？" class="headerlink" title="2.5 操作字节码有哪些技术？在什么场景下会用到？"></a>2.5 操作字节码有哪些技术？在什么场景下会用到？</h3><h2 id="3-参考"><a href="#3-参考" class="headerlink" title="3 参考"></a>3 参考</h2><p>业务中台    </p>
-<p>文档</p>
-
+<h3 id="2-3-什么是双亲委派？Tomcat如何打破？"><a href="#2-3-什么是双亲委派？Tomcat如何打破？" class="headerlink" title="2.3 什么是双亲委派？Tomcat如何打破？"></a>2.3 什么是双亲委派？Tomcat如何打破？</h3><h3 id="2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？"><a href="#2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？" class="headerlink" title="2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？"></a>2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？</h3><h3 id="2-5-操作字节码有哪些技术？在什么场景下会用到？"><a href="#2-5-操作字节码有哪些技术？在什么场景下会用到？" class="headerlink" title="2.5 操作字节码有哪些技术？在什么场景下会用到？"></a>2.5 操作字节码有哪些技术？在什么场景下会用到？</h3><h3 id="2-6-Groovy中定义了哪些类加载器？"><a href="#2-6-Groovy中定义了哪些类加载器？" class="headerlink" title="2.6 Groovy中定义了哪些类加载器？"></a>2.6 Groovy中定义了哪些类加载器？</h3><ul>
+<li>RootLoader：管理了Groovy的classpath，负责加载Groovy及其依赖的第三方库中的类，它不是使用双亲委派模型。</li>
+<li>GroovyClassLoader：负责在运行时编译groovy源代码为Class的工作，从而使Groovy实现了将groovy源代码动态加载为Class的功能。</li>
+<li>GroovyClassLoader.InnerLoader：Groovy脚本类的直接ClassLoader，它将加载工作委派给GroovyClassLoader，它的存在是为了支持不同源码里使用相同的类名，以及加载的类能顺利被GC。</li>
+</ul>
+<p>Spring Context 中有  org.springframework.scripting.groovy.GroovyScriptFactory 类</p>
+<h2 id="3-参考"><a href="#3-参考" class="headerlink" title="3 参考"></a>3 参考</h2>
       
 
       
@@ -228,6 +233,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">框架基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -292,11 +308,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/09/10/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/09/10/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          框架基础系列文章
+          框架基础：并发编程
         
       </div>
     </a>
@@ -441,15 +457,31 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">修心断念</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">知识网</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">问题</a>
+                <a href="javascript:void(0)" class="js-tag color5">觉性智慧</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">修心断念</a>
+                <a href="javascript:void(0)" class="js-tag color5">临在当下</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">混沌学院</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">框架基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">问题</a>
               </li>
             
             <div class="clearfix"></div>
