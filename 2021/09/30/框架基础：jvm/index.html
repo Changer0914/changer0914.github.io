@@ -6,23 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.dotoday.cn">
-  <title>框架基础：jvm | 大帅的blog</title>
+  <title>框架基础：jvm垃圾回收 | 大帅的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1 知识体系2 问题jvm的默认配置jvm的内存划分 只有堆内存才有垃圾回收。  如何判断是死亡对象垃圾回收算法有哪些jvm默认使用的垃圾收集器如何查看？ 如何配置其他垃圾收集器？ 何时触发young gc何时触发full gc内存分析工具 jmap内存分析工具 MAT自带监控工具 jstat查看线程堆栈 jstack如何进行远程jmxjar启动参数：这是无认证（不带用户名和密码）的配置">
+  <meta name="description" content="垃圾回收。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="框架基础：jvm">
+<meta property="og:title" content="框架基础：jvm垃圾回收">
 <meta property="og:url" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/index.html">
 <meta property="og:site_name" content="大帅的blog">
-<meta property="og:description" content="1 知识体系2 问题jvm的默认配置jvm的内存划分 只有堆内存才有垃圾回收。  如何判断是死亡对象垃圾回收算法有哪些jvm默认使用的垃圾收集器如何查看？ 如何配置其他垃圾收集器？ 何时触发young gc何时触发full gc内存分析工具 jmap内存分析工具 MAT自带监控工具 jstat查看线程堆栈 jstack如何进行远程jmxjar启动参数：这是无认证（不带用户名和密码）的配置">
+<meta property="og:description" content="垃圾回收。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/EBCC3A79-8898-4D1F-9E6B-D17E4346BD12.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/867B2CE9-AB50-4D78-8DC7-DBC9B79ED055.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930163530966.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930163742776.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161428834.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161803687.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930164618871.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930162629017.png">
 <meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930162720736.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171742509.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171421448.png">
+<meta property="og:image" content="http://www.dotoday.cn/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171629316.png">
 <meta property="article:published_time" content="2021-09-30T08:02:52.000Z">
-<meta property="article:modified_time" content="2021-09-30T08:28:16.834Z">
+<meta property="article:modified_time" content="2021-09-30T09:29:02.371Z">
 <meta property="article:author" content="dashuai">
 <meta property="article:tag" content="技术">
 <meta property="article:tag" content="框架基础">
@@ -179,7 +185,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      框架基础：jvm
+      框架基础：jvm垃圾回收
     </h1>
   
 
@@ -192,21 +198,122 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <span id="more"></span>
+        <p>垃圾回收。</p>
+<span id="more"></span>
 
 
 
 <h2 id="1-知识体系"><a href="#1-知识体系" class="headerlink" title="1 知识体系"></a>1 知识体系</h2><h2 id="2-问题"><a href="#2-问题" class="headerlink" title="2 问题"></a>2 问题</h2><h3 id="jvm的默认配置"><a href="#jvm的默认配置" class="headerlink" title="jvm的默认配置"></a>jvm的默认配置</h3><h3 id="jvm的内存划分"><a href="#jvm的内存划分" class="headerlink" title="jvm的内存划分"></a>jvm的内存划分</h3><p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/EBCC3A79-8898-4D1F-9E6B-D17E4346BD12.png" alt="EBCC3A79-8898-4D1F-9E6B-D17E4346BD12"></p>
 <p>只有堆内存才有垃圾回收。</p>
 <p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/867B2CE9-AB50-4D78-8DC7-DBC9B79ED055.png" alt="867B2CE9-AB50-4D78-8DC7-DBC9B79ED055"></p>
-<h3 id="如何判断是死亡对象"><a href="#如何判断是死亡对象" class="headerlink" title="如何判断是死亡对象"></a>如何判断是死亡对象</h3><h3 id="垃圾回收算法有哪些"><a href="#垃圾回收算法有哪些" class="headerlink" title="垃圾回收算法有哪些"></a>垃圾回收算法有哪些</h3><h3 id="jvm默认使用的垃圾收集器"><a href="#jvm默认使用的垃圾收集器" class="headerlink" title="jvm默认使用的垃圾收集器"></a>jvm默认使用的垃圾收集器</h3><p>如何查看？</p>
-<p>如何配置其他垃圾收集器？</p>
-<h3 id="何时触发young-gc"><a href="#何时触发young-gc" class="headerlink" title="何时触发young gc"></a>何时触发young gc</h3><h3 id="何时触发full-gc"><a href="#何时触发full-gc" class="headerlink" title="何时触发full gc"></a>何时触发full gc</h3><h3 id="内存分析工具-jmap"><a href="#内存分析工具-jmap" class="headerlink" title="内存分析工具 jmap"></a>内存分析工具 jmap</h3><h3 id="内存分析工具-MAT"><a href="#内存分析工具-MAT" class="headerlink" title="内存分析工具 MAT"></a>内存分析工具 MAT</h3><h3 id="自带监控工具-jstat"><a href="#自带监控工具-jstat" class="headerlink" title="自带监控工具 jstat"></a>自带监控工具 jstat</h3><h3 id="查看线程堆栈-jstack"><a href="#查看线程堆栈-jstack" class="headerlink" title="查看线程堆栈 jstack"></a>查看线程堆栈 jstack</h3><h3 id="如何进行远程jmx"><a href="#如何进行远程jmx" class="headerlink" title="如何进行远程jmx"></a>如何进行远程jmx</h3><p>jar启动参数：这是无认证（不带用户名和密码）的配置</p>
+<h3 id="如何判断是死亡对象"><a href="#如何判断是死亡对象" class="headerlink" title="如何判断是死亡对象"></a>如何判断是死亡对象</h3><h3 id="垃圾回收算法有哪些"><a href="#垃圾回收算法有哪些" class="headerlink" title="垃圾回收算法有哪些"></a>垃圾回收算法有哪些</h3><h3 id="jdk8默认使用的垃圾收集器"><a href="#jdk8默认使用的垃圾收集器" class="headerlink" title="jdk8默认使用的垃圾收集器"></a>jdk8默认使用的垃圾收集器</h3><p>如何查看？</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930163530966.png" alt="image-20210930163530966"></p>
+<p>到底是 Parallel Scavenge（新生代）+ Serial Old（老年代）</p>
+<p>还是 Parallel Scavenge（新生代） + Parallel Old （老年代） ？？？</p>
+<h4 id="如何配置其他垃圾收集器？"><a href="#如何配置其他垃圾收集器？" class="headerlink" title="如何配置其他垃圾收集器？"></a>如何配置其他垃圾收集器？</h4><p>在JVM中是+XX配置实现的搭配组合：</p>
+<p>UseSerialGC 表示 “Serial” + “Serial Old”组合</p>
+<p>UseParNewGC 表示 “ParNew” + “Serial Old”</p>
+<p>UseConcMarkSweepGC 表示 “ParNew” + “CMS”. 组合，“CMS” 是针对旧生代使用最多的</p>
+<p>UseParallelGC 表示 “Parallel Scavenge” + “Parallel Old”组合</p>
+<p>UseParallelOldGC 表示 “Parallel Scavenge” + “Parallel Old”组合</p>
+<p>在实践中使用UseConcMarkSweepGC 表示 “ParNew” + “CMS” 的组合是经常使用的</p>
+<p>在介绍垃圾收集器之前，需要明确一点，就是在新生代采用的停止复制算法中，“停 止（Stop-the-world）”的意义是在回收内存时，需要暂停其他所 有线程的执行。这个是很低效的，现在的各种新生代收集器越来越优化这一点，但仍然只是将停止的时间变短，并未彻底取消停止。</p>
+<ul>
+<li><p>Serial收集器：新生代收集器，使用停止复制算法，使用一个线程进行GC，串行，其它工作线程暂停。使用-XX:+UseSerialGC可以使用Serial+Serial Old模式运行进行内存回收（这也是虚拟机在Client模式下运行的默认值）</p>
+</li>
+<li><p>ParNew收集器：新生代收集器，使用停止复制算法，Serial收集器的多线程版，用多个线程进行GC，并行，其它工作线程暂停，关注缩短垃圾收集时间。使用-XX:+UseParNewGC开关来控制使用ParNew+Serial Old收集器组合收集内存；使用-XX:ParallelGCThreads来设置执行内存回收的线程数。</p>
+</li>
+<li><p>Parallel Scavenge 收集器：新生代收集器，使用停止复制算法，关注CPU吞吐量，即运行用户代码的时间/总时间，比如：JVM运行100分钟，其中运行用户代码99分钟，垃 圾收集1分钟，则吞吐量是99%，这种收集器能最高效率的利用CPU，适合运行后台运算（关注缩短垃圾收集时间的收集器，如CMS，等待时间很少，所以适 合用户交互，提高用户体验）。使用-XX:+UseParallelGC开关控制使用Parallel Scavenge+Serial Old收集器组合回收垃圾（这也是在Server模式下的默认值）；使用-XX:GCTimeRatio来设置用户执行时间占总时间的比例，默认99，即1%的时间用来进行垃圾回收。使用-XX:MaxGCPauseMillis设置GC的最大停顿时间（这个参数只对Parallel Scavenge有效），用开关参数-XX:+UseAdaptiveSizePolicy可以进行动态控制，如自动调整Eden/Survivor比例，老年代对象年龄，新生代大小等，这个参数在ParNew下没有。</p>
+</li>
+<li><p>Serial Old收集器：老年代收集器，单线程收集器，串行，使用标记整理（整理的方法是Sweep（清理）和Compact（压缩），清理是将废弃的对象干掉，只留幸存的对象，压缩是将移动对象，将空间填满保证内存分为2块，一块全是对象，一块空闲）算法，使用单线程进行GC，其它工作线程暂停（注意，在老年代中进行标记整理算法清理，也需要暂停其它线程），在JDK1.5之前，Serial Old收集器与ParallelScavenge搭配使用。</p>
+</li>
+<li><p>Parallel Old收集器：老年代收集器，多线程，并行，多线程机制与Parallel Scavenge差不错，使用标记整理（与Serial Old不同，这里的整理是Summary（汇总）和Compact（压缩），汇总的意思就是将幸存的对象复制到预先准备好的区域，而不是像Sweep（清理）那样清理废弃的对象）算法，在Parallel Old执行时，仍然需要暂停其它线程。Parallel Old在多核计算中很有用。Parallel Old出现后（JDK 1.6），与Parallel Scavenge配合有很好的效果，充分体现Parallel Scavenge收集器吞吐量优先的效果。使用-XX:+UseParallelOldGC开关控制使用Parallel Scavenge +Parallel Old组合收集器进行收集。</p>
+</li>
+<li><p>G1收集器：在JDK1.7中正式发布。</p>
+</li>
+<li><p>CMS（Concurrent Mark Sweep）收集器：老年代收集器，致力于获取最短回收停顿时间（即缩短垃圾回收的时间），使用标记清除算法，多线程，优点是并发收集（用户线程可以和GC线程同时工作），停顿小。使用-XX:+UseConcMarkSweepGC进行ParNew+CMS+Serial Old进行内存回收，优先使用ParNew+CMS（原因见后面），当用户线程内存不足时，采用备用方案Serial Old收集。</p>
+</li>
+</ul>
+<blockquote>
+<p>CMS收集的执行过程是：初始标记(CMS-initial-mark) -&gt; 并发标记(CMS-concurrent-mark) –&gt;预清理(CMS-concurrent-preclean)–&gt;可控预清理(CMS-concurrent-abortable-preclean)-&gt; 重新标记(CMS-remark) -&gt; 并发清除(CMS-concurrent-sweep) -&gt;并发重设状态等待下次CMS的触发(CMS-concurrent-reset)</p>
+<p>具体的说，先2次标记，1次预清理，1次重新标记，再1次清除。 </p>
+<p>1，首先jvm根据-XX:CMSInitiatingOccupancyFraction，-XX:+UseCMSInitiatingOccupancyOnly来决定什么时间开始垃圾收集；</p>
+<p>2，如果设置了-XX:+UseCMSInitiatingOccupancyOnly，那么只有当old代占用确实达到了-XX:CMSInitiatingOccupancyFraction参数所设定的比例时才会触发cms gc；</p>
+<p>3，如果没有设置-XX:+UseCMSInitiatingOccupancyOnly，那么系统会根据统计数据自行决定什么时候触发cms gc；因此有时会遇到设置了80%比例才cms gc，但是50%时就已经触发了，就是因为这个参数没有设置的原因；</p>
+<p>4，当cms gc开始时，首先的阶段是初始标记(CMS-initial-mark)，是stop the world阶段，因此此阶段标记的对象只是从root集最直接可达的对象；</p>
+<p>   CMS-initial-mark：961330K（1572864K），指标记时，old代的已用空间和总空间</p>
+<p>5，下一个阶段是并发标记(CMS-concurrent-mark)，此阶段是和应用线程并发执行的，所谓并发收集器指的就是这个，主要作用是标记可达的对象，此阶段不需要用户停顿。</p>
+<p>​    此阶段会打印2条日志：CMS-concurrent-mark-start，CMS-concurrent-mark</p>
+<p>6，下一个阶段是CMS-concurrent-preclean，此阶段主要是进行一些预清理，因为标记和应用线程是并发执行的，因此会有些对象的状态在标记后会改变，此阶段正是解决这个问题因为之后的Rescan阶段也会stop the world，为了使暂停的时间尽可能的小，也需要preclean阶段先做一部分工作以节省时间</p>
+<p>   此阶段会打印2条日志：CMS-concurrent-preclean-start，CMS-concurrent-preclean</p>
+<p>7，下一阶段是CMS-concurrent-abortable-preclean阶段，加入此阶段的目的是使cms gc更加可控一些，作用也是执行一些预清理，以减少Rescan阶段造成应用暂停的时间</p>
+<p>   此阶段涉及几个参数：</p>
+<p>   -XX:CMSMaxAbortablePrecleanTime：当abortable-preclean阶段执行达到这个时间时才会结束</p>
+<p>   -XX:CMSScheduleRemarkEdenSizeThreshold（默认2m）：控制abortable-preclean阶段什么时候开始执行，</p>
+<p>   即当eden使用达到此值时，才会开始abortable-preclean阶段</p>
+<p>   -XX:CMSScheduleRemarkEdenPenetratio（默认50%）：控制abortable-preclean阶段什么时候结束执行</p>
+<p>   此阶段会打印一些日志如下：</p>
+<p>   CMS-concurrent-abortable-preclean-start，CMS-concurrent-abortable-preclean，</p>
+<p>   CMS：abort preclean due to time XXX</p>
+<p>8，再下一个阶段是第二个stop the world阶段了，即Rescan阶段，此阶段暂停应用线程，停顿时间比并发标记小得多，但比初始标记稍长。对对象进行重新扫描并标记；</p>
+<p>​    YG occupancy：964861K（2403008K），指执行时young代的情况</p>
+<p>​    CMS remark：961330K（1572864K），指执行时old代的情况</p>
+<p>   此外，还打印出了弱引用处理、类卸载等过程的耗时</p>
+<p>9，再下一个阶段是CMS-concurrent-sweep，进行并发的垃圾清理</p>
+<p>10，最后是CMS-concurrent-reset，为下一次cms gc重置相关数据结构</p>
+<p>有2种情况会触发CMS 的悲观full gc，在悲观full gc时，整个应用会暂停</p>
+<p>​    A，concurrent-mode-failure：预清理阶段可能出现，当cms gc正进行时，此时有新的对象要进行old代，但是old代空间不足造成的。其可能性有：1，O区空间不足以让新生代晋级，2，O区空间用完之前，无法完成对无引用的对象的清理。这表明，当前有大量数据进入内存且无法释放。</p>
+<p>​    B，promotion-failed：新生代young gc可能出现，当进行young gc时，有部分young代对象仍然可用，但是S1或S2放不下，因此需要放到old代，但此时old代空间无法容纳此。</p>
+<p>影响cms gc时长及触发的参数是以下2个：</p>
+<p>​    -XX:CMSMaxAbortablePrecleanTime=5000</p>
+<p>​    -XX:CMSInitiatingOccupancyFraction=80</p>
+<p>解决也是针对这两个参数来的，根本的原因是每次请求消耗的内存量过大</p>
+<p>解决方式：</p>
+<p>   A，针对cms gc的触发阶段，调整-XX:CMSInitiatingOccupancyFraction=50，提早触发cms gc，就可以缓解当old代达到80%，cms gc处理不完，从而造成concurrent mode failure引发full gc</p>
+<p>   B，修改-XX:CMSMaxAbortablePrecleanTime=500，缩小CMS-concurrent-abortable-preclean阶段的时间</p>
+<p>   C，考虑到cms gc时不会进行compact，因此加入-XX:+UseCMSCompactAtFullCollection</p>
+<p>​    （cms gc后会进行内存的compact）和-XX:CMSFullGCsBeforeCompaction=4（在full gc4次后会进行compact）参数</p>
+<p>在CMS清理过程中，只有初始标记和重新标记需要短暂停顿，并发标记和并发清除都不需要暂停用户线程，因此效率很高，很适合高交互的场合。</p>
+<p>CMS也有缺点，它需要消耗额外的CPU和内存资源，在CPU和内存资源紧张，CPU较少时，会加重系统负担（CMS默认启动线程数为(CPU数量+3)/4）。</p>
+<p>另外，在并发收集过程中，用户线程仍然在运行，仍然产生内存垃圾，所以可能产生“浮动垃圾”，本次无法清理，只能下一次Full GC才清理，因此在GC期间，需要预留足够的内存给用户线程使用。所以使用CMS的收集器并不是老年代满了才触发Full GC，而是在使用了一大半（默认68%，即2/3，使用-XX:CMSInitiatingOccupancyFraction来设置）的时候就要进行Full GC，如果用户线程消耗内存不是特别大，可以适当调高-XX:CMSInitiatingOccupancyFraction以降低GC次数，提高性能，如果预留的用户线程内存不够，则会触发Concurrent Mode Failure，此时，将触发备用方案：使用Serial Old 收集器进行收集，但这样停顿时间就长了，因此-XX:CMSInitiatingOccupancyFraction不宜设的过大。</p>
+<p>还有，CMS采用的是标记清除算法，会导致内存碎片的产生，可以使用-XX：+UseCMSCompactAtFullCollection来设置是否在Full GC之后进行碎片整理，用-XX：CMSFullGCsBeforeCompaction来设置在执行多少次不压缩的Full GC之后，来一次带压缩的Full GC。</p>
+</blockquote>
+<h3 id="何时触发young-gc"><a href="#何时触发young-gc" class="headerlink" title="何时触发young gc"></a>何时触发young gc</h3><p>又叫Minor GC。</p>
+<p>创建新对象时会从中分配内存，内存不足时，触发 Young GC。</p>
+<p>（当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden代满，Survivor满不会引发GC。）</p>
+<h3 id="何时触发full-gc"><a href="#何时触发full-gc" class="headerlink" title="何时触发full gc"></a>何时触发full gc</h3><p>又叫 Major GC。</p>
+<p>（1）调用System.gc时，系统建议执行Full GC，但是不必然执行。</p>
+<p>执行System.gc()函数的作用只是提醒或告诉虚拟机，希望进行一次垃圾回收。</p>
+<p>至于什么时候进行回收还是取决于虚拟机，而且也不能保证一定进行回收（如果-XX:+DisableExplicitGC设置成true，则不会进行回收）。</p>
+<p>（2）老年代空间不足</p>
+<p><del>（3）方法区空间不足（jdk1.8 方法区不在堆里，所以这里不会触发）</del></p>
+<p>（4）Minor GC 对象晋升到老年代 ： 通过Minor GC后进入老年代的平均大小大于老年代的可用内存</p>
+<p>（5）由Eden区、survivor space1（From Space）区向survivor space2（To Space）区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</p>
+<h3 id="内存分析工具-jmap"><a href="#内存分析工具-jmap" class="headerlink" title="内存分析工具 jmap"></a>内存分析工具 jmap</h3><p>jmap -heap pid</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         &#x3D; 0</span><br><span class="line">   MaxHeapFreeRatio         &#x3D; 100</span><br><span class="line">   MaxHeapSize              &#x3D; 6442450944 (6144.0MB)</span><br><span class="line">   NewSize                  &#x3D; 2147483648 (2048.0MB)   新生代</span><br><span class="line">   MaxNewSize               &#x3D; 2147483648 (2048.0MB)</span><br><span class="line">   OldSize                  &#x3D; 4294967296 (4096.0MB)   老年代</span><br><span class="line">   NewRatio                 &#x3D; 2      新生代和老年代的内存比例</span><br><span class="line">   SurvivorRatio            &#x3D; 8      新生代中E区和S区的比例（E : 2个S）</span><br><span class="line">   MetaspaceSize            &#x3D; 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         &#x3D; 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         &#x3D; 0 (0.0MB)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity &#x3D; 1938292736 (1848.5MB)</span><br><span class="line">   used     &#x3D; 1368888040 (1305.4733657836914MB)</span><br><span class="line">   free     &#x3D; 569404696 (543.0266342163086MB)</span><br><span class="line">   70.6233900883793% used</span><br><span class="line">From Space:</span><br><span class="line">   capacity &#x3D; 105381888 (100.5MB)</span><br><span class="line">   used     &#x3D; 82674312 (78.84436798095703MB)</span><br><span class="line">   free     &#x3D; 22707576 (21.65563201904297MB)</span><br><span class="line">   78.45210744373834% used</span><br><span class="line">To Space:</span><br><span class="line">   capacity &#x3D; 103809024 (99.0MB)</span><br><span class="line">   used     &#x3D; 0 (0.0MB)</span><br><span class="line">   free     &#x3D; 103809024 (99.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation</span><br><span class="line">   capacity &#x3D; 4294967296 (4096.0MB)</span><br><span class="line">   used     &#x3D; 342100464 (326.25242614746094MB)</span><br><span class="line">   free     &#x3D; 3952866832 (3769.747573852539MB)</span><br><span class="line">   7.9651471227407455% used</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="内存分析工具-MAT"><a href="#内存分析工具-MAT" class="headerlink" title="内存分析工具 MAT"></a>内存分析工具 MAT</h3><h3 id="自带监控工具-jstat"><a href="#自带监控工具-jstat" class="headerlink" title="自带监控工具 jstat"></a>自带监控工具 jstat</h3><p>jstat -gcutil 进程ID 3s</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930163742776.png" alt="image-20210930163742776"></p>
+<p>M  元空间的内存使用百分比</p>
+<p>O  老年代的内存使用百分比</p>
+<p>CCS  Compressed class space utilization as a percentage.</p>
+<p>参数解释看文档：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html</a></p>
+<h3 id="查看线程堆栈-jstack"><a href="#查看线程堆栈-jstack" class="headerlink" title="查看线程堆栈 jstack"></a>查看线程堆栈 jstack</h3><h3 id="如何进行远程jmx"><a href="#如何进行远程jmx" class="headerlink" title="如何进行远程jmx"></a>如何进行远程jmx</h3><p>jar启动参数：这是无认证（不带用户名和密码）的配置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote&#x3D;true</span><br><span class="line">-Djava.rmi.server.hostname&#x3D;192.168.198.137 </span><br><span class="line">-Dcom.sun.management.jmxremote.port&#x3D;1919 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate&#x3D;false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl&#x3D;false</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161428834.png" alt="image-20210930161428834"></p>
 <p>本地启动：双击<code>%JAVA_HOME%/bin/jvisualvm.exe</code> 启动Java VisualVM</p>
 <p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161803687.png" alt="image-20210930161803687"></p>
+<h3 id="jvm有哪些调节参数，默认值是什么？"><a href="#jvm有哪些调节参数，默认值是什么？" class="headerlink" title="jvm有哪些调节参数，默认值是什么？"></a>jvm有哪些调节参数，默认值是什么？</h3><p>可以用 java -XX:+PrintFlagsFinal  查看</p>
+<h3 id="为何将Xms和Xmx设置一样大？"><a href="#为何将Xms和Xmx设置一样大？" class="headerlink" title="为何将Xms和Xmx设置一样大？"></a>为何将Xms和Xmx设置一样大？</h3><p>为了避免堆收缩和扩大时对性能的影响。</p>
+<h3 id="其他分析工具"><a href="#其他分析工具" class="headerlink" title="其他分析工具"></a>其他分析工具</h3><p>开源arthas</p>
+<p>阿里ARMS</p>
+<h3 id="什么是内存泄露？什么是内存溢出？"><a href="#什么是内存泄露？什么是内存溢出？" class="headerlink" title="什么是内存泄露？什么是内存溢出？"></a>什么是内存泄露？什么是内存溢出？</h3><p>溢出：你的数据 不能 放到 你申请的空间里。</p>
+<p>泄露：你申请的空间，用完后，一直没有被释放。</p>
+<p>​    堆内存里的不可达对象 是会被回收的，理论上不存在内存泄露。</p>
+<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930164618871.png" alt="image-20210930164618871"></p>
 <h2 id="3-实战"><a href="#3-实战" class="headerlink" title="3 实战"></a>3 实战</h2><h3 id="追查老配置中心所在服务器的内存报警问题"><a href="#追查老配置中心所在服务器的内存报警问题" class="headerlink" title="追查老配置中心所在服务器的内存报警问题"></a>追查老配置中心所在服务器的内存报警问题</h3><p>1、当时的环境</p>
 <p>服务器配置：4核8G</p>
 <p>jvm配置：jdk版本是1.8，用的是 UseParallelGC 表示 Parallel Scavenge + Parallel Old 组合</p>
@@ -224,7 +331,24 @@
 <p>4、疑问：为何会重启？</p>
 <p>docker配置了重启参数。</p>
 <p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930162720736.png" alt="image-20210930162720736"></p>
-<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2>
+<p>5、使用 cms 垃圾器，配置老年代内存达到80%时进行 full gc</p>
+<p>-XX:+UseConcMarkSweepGC<br>-XX:CMSInitiatingOccupancyFraction=80</p>
+<p>验证配置是否生效。</p>
+<p>看jstat监控：O区使用量不会超过80%了，full gc变得频繁</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171742509.png" alt="image-20210930171742509"></p>
+<p>看jmap</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171421448.png" alt="image-20210930171421448"></p>
+<p>相比使用默认收集器，压测接口吞吐量下降</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930171629316.png" alt="image-20210930171629316"></p>
+<p>6、不触发内存报警的方案：</p>
+<p>掩耳盗铃式：关闭报警。</p>
+<p>最简：增大服务器内存。</p>
+<p>修改jvm参数：分析原因。尽快 触发 full gc 。</p>
+<p>​    降低堆内存大小。</p>
+<p>​    当老年代内存使用率达到一定比例时，触发full gc</p>
+<p>优化代码：用时长，风险高。</p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2><p>1、<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhguang/p/3257367.html">Java系列笔记(3) - Java 内存区域和GC机制</a></p>
+
       
 
       
@@ -499,6 +623,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">问题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">觉性智慧</a>
               </li>
              
@@ -508,10 +636,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">混沌学院</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">问题</a>
               </li>
              
               <li class="article-tag-list-item">
