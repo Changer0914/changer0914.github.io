@@ -163,6 +163,115 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-框架基础：jvm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/">框架基础：jvm</a>
+    </h1>
+  
+
+        
+        <a href="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/" class="archive-article-date">
+  	<time datetime="2021-09-30T08:02:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+
+
+<h2 id="1-知识体系"><a href="#1-知识体系" class="headerlink" title="1 知识体系"></a>1 知识体系</h2><h2 id="2-问题"><a href="#2-问题" class="headerlink" title="2 问题"></a>2 问题</h2><h3 id="jvm的默认配置"><a href="#jvm的默认配置" class="headerlink" title="jvm的默认配置"></a>jvm的默认配置</h3><h3 id="jvm的内存划分"><a href="#jvm的内存划分" class="headerlink" title="jvm的内存划分"></a>jvm的内存划分</h3><p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/EBCC3A79-8898-4D1F-9E6B-D17E4346BD12.png" alt="EBCC3A79-8898-4D1F-9E6B-D17E4346BD12"></p>
+<p>只有堆内存才有垃圾回收。</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/867B2CE9-AB50-4D78-8DC7-DBC9B79ED055.png" alt="867B2CE9-AB50-4D78-8DC7-DBC9B79ED055"></p>
+<h3 id="如何判断是死亡对象"><a href="#如何判断是死亡对象" class="headerlink" title="如何判断是死亡对象"></a>如何判断是死亡对象</h3><h3 id="垃圾回收算法有哪些"><a href="#垃圾回收算法有哪些" class="headerlink" title="垃圾回收算法有哪些"></a>垃圾回收算法有哪些</h3><h3 id="jvm默认使用的垃圾收集器"><a href="#jvm默认使用的垃圾收集器" class="headerlink" title="jvm默认使用的垃圾收集器"></a>jvm默认使用的垃圾收集器</h3><p>如何查看？</p>
+<p>如何配置其他垃圾收集器？</p>
+<h3 id="何时触发young-gc"><a href="#何时触发young-gc" class="headerlink" title="何时触发young gc"></a>何时触发young gc</h3><h3 id="何时触发full-gc"><a href="#何时触发full-gc" class="headerlink" title="何时触发full gc"></a>何时触发full gc</h3><h3 id="内存分析工具-jmap"><a href="#内存分析工具-jmap" class="headerlink" title="内存分析工具 jmap"></a>内存分析工具 jmap</h3><h3 id="内存分析工具-MAT"><a href="#内存分析工具-MAT" class="headerlink" title="内存分析工具 MAT"></a>内存分析工具 MAT</h3><h3 id="自带监控工具-jstat"><a href="#自带监控工具-jstat" class="headerlink" title="自带监控工具 jstat"></a>自带监控工具 jstat</h3><h3 id="查看线程堆栈-jstack"><a href="#查看线程堆栈-jstack" class="headerlink" title="查看线程堆栈 jstack"></a>查看线程堆栈 jstack</h3><h3 id="如何进行远程jmx"><a href="#如何进行远程jmx" class="headerlink" title="如何进行远程jmx"></a>如何进行远程jmx</h3><p>jar启动参数：这是无认证（不带用户名和密码）的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote&#x3D;true</span><br><span class="line">-Djava.rmi.server.hostname&#x3D;192.168.198.137 </span><br><span class="line">-Dcom.sun.management.jmxremote.port&#x3D;1919 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate&#x3D;false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl&#x3D;false</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161428834.png" alt="image-20210930161428834"></p>
+<p>本地启动：双击<code>%JAVA_HOME%/bin/jvisualvm.exe</code> 启动Java VisualVM</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930161803687.png" alt="image-20210930161803687"></p>
+<h2 id="3-实战"><a href="#3-实战" class="headerlink" title="3 实战"></a>3 实战</h2><h3 id="追查老配置中心所在服务器的内存报警问题"><a href="#追查老配置中心所在服务器的内存报警问题" class="headerlink" title="追查老配置中心所在服务器的内存报警问题"></a>追查老配置中心所在服务器的内存报警问题</h3><p>1、当时的环境</p>
+<p>服务器配置：4核8G</p>
+<p>jvm配置：jdk版本是1.8，用的是 UseParallelGC 表示 Parallel Scavenge + Parallel Old 组合</p>
+<p>  -XX:+UnlockExperimentalVMOptions </p>
+<p>   -XX:+UnlockDiagnosticVMOptions</p>
+<p>   -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/super/heapdump.hprof</p>
+<p>   -Xms6144m -Xmx6144m</p>
+<p>2、现象</p>
+<p>内存使用率一直往上增，触发报警，然后自动重启。</p>
+<p>3、疑问：为何一直没有生成heapdump.hprof文件？</p>
+<p>直到昨天涛哥提出，应用应该是被操作系统干掉的，看日志。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;Out of memory&quot; &#x2F;var&#x2F;log&#x2F;messages</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930162629017.png" alt="image-20210930162629017"></p>
+<p>4、疑问：为何会重启？</p>
+<p>docker配置了重启参数。</p>
+<p><img src="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/image-20210930162720736.png" alt="image-20210930162720736"></p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">框架基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/09/30/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9Ajvm/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-觉性智慧" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -866,89 +975,6 @@
 
 
   
-    <article id="post-戒为良药第126季：戒色钻石体系之戒色十规" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/25/%E6%88%92%E4%B8%BA%E8%89%AF%E8%8D%AF%E7%AC%AC126%E5%AD%A3%EF%BC%9A%E6%88%92%E8%89%B2%E9%92%BB%E7%9F%B3%E4%BD%93%E7%B3%BB%E4%B9%8B%E6%88%92%E8%89%B2%E5%8D%81%E8%A7%84/">戒为良药第126季：戒色钻石体系之戒色十规</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/25/%E6%88%92%E4%B8%BA%E8%89%AF%E8%8D%AF%E7%AC%AC126%E5%AD%A3%EF%BC%9A%E6%88%92%E8%89%B2%E9%92%BB%E7%9F%B3%E4%BD%93%E7%B3%BB%E4%B9%8B%E6%88%92%E8%89%B2%E5%8D%81%E8%A7%84/" class="archive-article-date">
-  	<time datetime="2021-01-25T08:06:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一.远离黄源：戒色后一定要注意远离黄源，删除手机和电脑里的不良资源。</p>
-<p>二.学习戒色文章：每天坚持学习戒色文章，多做笔记，多复习笔记，提高吸收率。</p>
-<p>三.练习断念：建议每天背诵断念口诀500遍以上（默念即可），一定要正确理解口诀的含义，严格按照口诀的意思去做，有佛缘的戒友也可以念佛持咒。</p>
-<p>四.做好慎独：独处时很容易破戒，戒色后一定要做好慎独，保持警惕，防意如城。</p>
-<p>五.视线管理：对境实战时要做好视线管理，看到诱惑马上避开，不聚焦、不停留、不回看。</p>
-<p>六.养生恢复：加强养生意识，严格控遗，适量锻炼，做有氧运动和养生功法。</p>
-<p>七.情绪管理：不良情绪或者狂欢情绪容易导致破戒，所以要做好情绪管理，保持心平气和。</p>
-<p>八.改过迁善：要勇于改正自己的不良习气，要克服一切负面的心态，多行善积德。</p>
-<p>九.培养德行：首重“谦德”，常修八德：孝、悌、忠、信、礼、义、廉、耻，多发感恩心、谦卑心、恭敬心、惭愧心、忏悔心。</p>
-<p>十.学习圣贤教育：让你的人生进入真正崇高而光明的境界，步入戒色大成澄明之境，戒出生命的大格局大气象。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">修心断念</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/25/%E6%88%92%E4%B8%BA%E8%89%AF%E8%8D%AF%E7%AC%AC126%E5%AD%A3%EF%BC%9A%E6%88%92%E8%89%B2%E9%92%BB%E7%9F%B3%E4%BD%93%E7%B3%BB%E4%B9%8B%E6%88%92%E8%89%B2%E5%8D%81%E8%A7%84/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
@@ -1052,15 +1078,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">杂记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">方法论</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">学习方法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">杂记</a>
               </li>
              
               <li class="article-tag-list-item">
