@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="看了《Netty权威指南》，真实枯燥，完全看不下去，打算这么学习下Netty。 前：预备知识tcp&#x2F;ip协议摘自：TCP&#x2F;IP协议分层模型  应用层是啥？你想用java写一个网络程序，你写的这个程序就是应用层所以QQ、微信、以及你正在使用的浏览器，都是应用层 应用层数据是啥？你想通过你前面写的这个网络程序发一个字符串”are you ok”到对方，这个字符串”are you ok”就是应用层数据对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="netty的学习项目">
+<meta property="og:title" content="如何深入学习netty">
 <meta property="og:url" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/index.html">
 <meta property="og:site_name" content="净霆的技术小栈">
 <meta property="og:description" content="看了《Netty权威指南》，真实枯燥，完全看不下去，打算这么学习下Netty。 前：预备知识tcp&#x2F;ip协议摘自：TCP&#x2F;IP协议分层模型  应用层是啥？你想用java写一个网络程序，你写的这个程序就是应用层所以QQ、微信、以及你正在使用的浏览器，都是应用层 应用层数据是啥？你想通过你前面写的这个网络程序发一个字符串”are you ok”到对方，这个字符串”are you ok”就是应用层数据对">
@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/tcp01.png">
 <meta property="og:image" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/netty02.png">
 <meta property="article:published_time" content="2022-12-30T07:53:01.000Z">
-<meta property="article:modified_time" content="2022-12-30T08:36:56.399Z">
+<meta property="article:modified_time" content="2022-12-30T08:48:13.977Z">
 <meta property="article:author" content="净霆">
 <meta property="article:tag" content="netty">
 <meta name="twitter:card" content="summary">
@@ -129,7 +129,7 @@
                     <div data-rel="软文">
                         
                         软文
-                        <small>(1)</small>
+                        <small>(4)</small>
                         
                     </div>
                     
@@ -276,12 +276,12 @@
            href="/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/"
            data-tag="netty"
            data-author="" >
-            <span class="post-title" title="netty的学习项目">netty的学习项目</span>
+            <span class="post-title" title="如何深入学习netty">如何深入学习netty</span>
             <span class="post-date" title="2022-12-30 15:53:01">2022/12/30</span>
         </a>
         
         
-        <a  class="All "
+        <a  class="All 软文 "
            href="/2022/12/30/%E6%8E%A2%E7%B4%A2%E5%8F%91%E7%8E%B0%EF%BC%9A%E6%88%91%E6%83%B3%E5%B9%B2%E4%BB%80%E4%B9%88/"
            data-tag="软文"
            data-author="" >
@@ -326,7 +326,7 @@
         </a>
         
         
-        <a  class="All "
+        <a  class="All 软文 "
            href="/2021/11/19/%E6%8A%80%E6%9C%AF%E4%BA%BA%E7%9A%84%E6%80%9D%E8%80%83%E6%A1%86%E6%9E%B6/"
            data-tag="软文"
            data-author="" >
@@ -344,7 +344,7 @@
         </a>
         
         
-        <a  class="All 软文 "
+        <a  class="All "
            href="/2021/09/10/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"
            data-tag="技术,框架基础,并发编程"
            data-author="" >
@@ -371,7 +371,7 @@
         </a>
         
         
-        <a  class="All "
+        <a  class="All 软文 "
            href="/2021/04/29/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%AD%A6%E4%B9%A0%E4%B8%80%E9%97%A8%E6%96%B0%E6%8A%80%E6%9C%AF/"
            data-tag="软文"
            data-author="" >
@@ -380,7 +380,7 @@
         </a>
         
         
-        <a  class="All "
+        <a  class="All 软文 "
            href="/2021/04/28/%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E6%96%B9%E6%B3%95%E8%AE%BA/"
            data-tag="软文"
            data-author="" >
@@ -423,6 +423,14 @@
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="软文">软文</a>
+            
+        </span>
+        
         
         <span class="tag">
             <i class="iconfont icon-tag"></i>
@@ -434,7 +442,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2022-12-30 14:26:11'>2021-04-29 11:57</time>
+            Created At : <time class="date" title='Updated At: 2022-12-30 17:04:35'>2021-04-29 11:57</time>
         
     </div>
     <div class="article-meta">
