@@ -6,20 +6,21 @@
   <meta name="keywords" content=" 软文 ">
   <meta name="description" content="技术人的思考框架 | 净霆的技术小栈">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="关于智慧  觉性智慧 当下和美 混沌学院">
+<meta name="description" content="看了《Netty权威指南》，真实枯燥，完全看不下去，打算这么学习下Netty。 前：预备知识tcp&#x2F;ip协议摘自：TCP&#x2F;IP协议分层模型  应用层是啥？你想用java写一个网络程序，你写的这个程序就是应用层所以QQ、微信、以及你正在使用的浏览器，都是应用层 应用层数据是啥？你想通过你前面写的这个网络程序发一个字符串”are you ok”到对方，这个字符串”are you ok”就是应用层数据对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="探索发现：我想干什么">
-<meta property="og:url" content="http://www.dotoday.cn/2022/12/30/%E6%8E%A2%E7%B4%A2%E5%8F%91%E7%8E%B0%EF%BC%9A%E6%88%91%E6%83%B3%E5%B9%B2%E4%BB%80%E4%B9%88/index.html">
+<meta property="og:title" content="netty的学习项目">
+<meta property="og:url" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/index.html">
 <meta property="og:site_name" content="净霆的技术小栈">
-<meta property="og:description" content="关于智慧  觉性智慧 当下和美 混沌学院">
+<meta property="og:description" content="看了《Netty权威指南》，真实枯燥，完全看不下去，打算这么学习下Netty。 前：预备知识tcp&#x2F;ip协议摘自：TCP&#x2F;IP协议分层模型  应用层是啥？你想用java写一个网络程序，你写的这个程序就是应用层所以QQ、微信、以及你正在使用的浏览器，都是应用层 应用层数据是啥？你想通过你前面写的这个网络程序发一个字符串”are you ok”到对方，这个字符串”are you ok”就是应用层数据对">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://www.dotoday.cn/2022/12/30/%E6%8E%A2%E7%B4%A2%E5%8F%91%E7%8E%B0%EF%BC%9A%E6%88%91%E6%83%B3%E5%B9%B2%E4%BB%80%E4%B9%88/image-20210925162913951-2558559.png">
-<meta property="article:published_time" content="2022-12-30T03:10:12.000Z">
-<meta property="article:modified_time" content="2022-12-30T06:26:26.986Z">
+<meta property="og:image" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/tcp01.png">
+<meta property="og:image" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/netty02.png">
+<meta property="article:published_time" content="2022-12-30T07:53:01.000Z">
+<meta property="article:modified_time" content="2022-12-30T08:24:44.899Z">
 <meta property="article:author" content="净霆">
-<meta property="article:tag" content="软文">
+<meta property="article:tag" content="netty">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.dotoday.cn/2022/12/30/%E6%8E%A2%E7%B4%A2%E5%8F%91%E7%8E%B0%EF%BC%9A%E6%88%91%E6%83%B3%E5%B9%B2%E4%BB%80%E4%B9%88/image-20210925162913951-2558559.png">
+<meta name="twitter:image" content="http://www.dotoday.cn/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/tcp01.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -117,7 +118,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(13)</small>
+                <small>(14)</small>
             
         </div>
     </li>
@@ -142,7 +143,7 @@
                     <div data-rel="netty">
                         
                         netty
-                        <small>(1)</small>
+                        <small>(2)</small>
                         
                     </div>
                     
@@ -165,7 +166,7 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="13">
+<input type="hidden" id="yelog_site_posts_number" value="14">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -269,6 +270,15 @@
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All netty "
+           href="/2022/12/30/%E5%A6%82%E4%BD%95%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0netty/"
+           data-tag="netty"
+           data-author="" >
+            <span class="post-title" title="netty的学习项目">netty的学习项目</span>
+            <span class="post-date" title="2022-12-30 15:53:01">2022/12/30</span>
+        </a>
         
         
         <a  class="All "
