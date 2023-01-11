@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>框架基础：类加载 | 净霆的技术小栈</title>
-  <meta name="keywords" content=" 技术 , 框架基础 ">
-  <meta name="description" content="框架基础：类加载 | 净霆的技术小栈">
+  <title>2022年工作总结与23年展望 | 净霆的技术小栈</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="2022年工作总结与23年展望 | 净霆的技术小栈">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="2022年总结在数云做的工作比较杂，亮点少，不向juan那样，说起ta就能想到网关、聚石塔日志、sla监控，这些对他涨薪、评级等非常有帮助，惭愧的是我却没有。 目前负责的工作项有： 用户中心 应用中心 渠道优化 有赞权益 订购中心 配置中心 cmdb、 开放平台&#x2F;回调平台 权限开通  这些仅有赞权益是自己从头到尾完成的，其他都是维护工作或者不是主负责人。如果更用心的话，每一项都能取得成就，“没有最">
 <meta property="og:type" content="article">
@@ -420,28 +420,19 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-框架基础：类加载" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-2022年工作总结与23年展望" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">框架基础：类加载</h1>
+        <h1 class="article-title">2022年工作总结与23年展望</h1>
     
     <div class="article-meta">
         
         
         
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color3">技术</a>
-            
-            <a class="color5">框架基础</a>
-            
-        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-09-25 16:29:49'>2021-09-04 18:16</time>
+            Created At : <time class="date" title='Updated At: 2023-01-11 10:46:50'>2023-01-11 10:38</time>
         
     </div>
     <div class="article-meta">
@@ -463,7 +454,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB"><span class="toc-text">1 知识体系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%97%AE%E9%A2%98"><span class="toc-text">2 问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%B1%BB%E5%8A%A0%E8%BD%BD%EF%BC%9F"><span class="toc-text">2.1 什么是类加载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%EF%BC%9F"><span class="toc-text">2.2 有哪些类加载器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%EF%BC%9FTomcat%E5%A6%82%E4%BD%95%E6%89%93%E7%A0%B4%EF%BC%9F"><span class="toc-text">2.3 什么是双亲委派？Tomcat如何打破？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%EF%BC%9F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%E6%8A%80%E6%9C%AF%EF%BC%9F%E5%9C%A8%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E4%BC%9A%E7%94%A8%E5%88%B0%EF%BC%9F"><span class="toc-text">2.5 操作字节码有哪些技术？在什么场景下会用到？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-Groovy%E4%B8%AD%E5%AE%9A%E4%B9%89%E4%BA%86%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%EF%BC%9F"><span class="toc-text">2.6 Groovy中定义了哪些类加载器？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8F%82%E8%80%83"><span class="toc-text">3 参考</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2022%E5%B9%B4%E6%80%BB%E7%BB%93"><span class="toc-text">2022年总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2023%E5%B9%B4%E5%B1%95%E6%9C%9B"><span class="toc-text">2023年展望</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -479,21 +470,42 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/field-6574455_960_720.jpg" alt="Field, Morning, Sunrise, Dawn, Nature, Landscape, Sky"></p>
-<span id="more"></span>
-
-
-
-<h2 id="1-知识体系"><a href="#1-知识体系" class="headerlink" title="1 知识体系"></a>1 知识体系</h2><p><img src="/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182014881.png" alt="image-20210904182014881"></p>
-<h2 id="2-问题"><a href="#2-问题" class="headerlink" title="2 问题"></a>2 问题</h2><h3 id="2-1-什么是类加载？"><a href="#2-1-什么是类加载？" class="headerlink" title="2.1 什么是类加载？"></a>2.1 什么是类加载？</h3><h3 id="2-2-有哪些类加载器？"><a href="#2-2-有哪些类加载器？" class="headerlink" title="2.2 有哪些类加载器？"></a>2.2 有哪些类加载器？</h3><img src="/2021/09/04/%E6%A1%86%E6%9E%B6%E5%9F%BA%E7%A1%80%EF%BC%9A%E7%B1%BB%E5%8A%A0%E8%BD%BD/image-20210904182442624.png" alt="image-20210904182442624" style="zoom:50%;">
-
-<h3 id="2-3-什么是双亲委派？Tomcat如何打破？"><a href="#2-3-什么是双亲委派？Tomcat如何打破？" class="headerlink" title="2.3 什么是双亲委派？Tomcat如何打破？"></a>2.3 什么是双亲委派？Tomcat如何打破？</h3><h3 id="2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？"><a href="#2-4-如何自定义类加载器？自定义类加载器的应用场景是什么？" class="headerlink" title="2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？"></a>2.4 如何自定义类加载器？自定义类加载器的应用场景是什么？</h3><h3 id="2-5-操作字节码有哪些技术？在什么场景下会用到？"><a href="#2-5-操作字节码有哪些技术？在什么场景下会用到？" class="headerlink" title="2.5 操作字节码有哪些技术？在什么场景下会用到？"></a>2.5 操作字节码有哪些技术？在什么场景下会用到？</h3><h3 id="2-6-Groovy中定义了哪些类加载器？"><a href="#2-6-Groovy中定义了哪些类加载器？" class="headerlink" title="2.6 Groovy中定义了哪些类加载器？"></a>2.6 Groovy中定义了哪些类加载器？</h3><ul>
-<li>RootLoader：管理了Groovy的classpath，负责加载Groovy及其依赖的第三方库中的类，它不是使用双亲委派模型。</li>
-<li>GroovyClassLoader：负责在运行时编译groovy源代码为Class的工作，从而使Groovy实现了将groovy源代码动态加载为Class的功能。</li>
-<li>GroovyClassLoader.InnerLoader：Groovy脚本类的直接ClassLoader，它将加载工作委派给GroovyClassLoader，它的存在是为了支持不同源码里使用相同的类名，以及加载的类能顺利被GC。</li>
+        <h1 id="2022年总结"><a href="#2022年总结" class="headerlink" title="2022年总结"></a>2022年总结</h1><p>在数云做的工作比较杂，亮点少，不向juan那样，说起ta就能想到网关、聚石塔日志、sla监控，这些对他涨薪、评级等非常有帮助，惭愧的是我却没有。</p>
+<p>目前负责的工作项有：</p>
+<pre><code>用户中心
+应用中心
+渠道优化
+有赞权益
+订购中心
+配置中心
+cmdb、
+开放平台/回调平台
+权限开通
+</code></pre>
+<p>这些仅有赞权益是自己从头到尾完成的，其他都是维护工作或者不是主负责人。<br>如果更用心的话，每一项都能取得成就，“没有最好，只有更好”对自己有要求。</p>
+<p>要给2022年总结的话：</p>
+<ul>
+<li>亮点不足，没有底气谈涨薪和评级</li>
+<li>内部分享太少</li>
+<li>工作专注度不够，工作期间摸鱼</li>
+<li>没有输出技术文章，博客没咋更新</li>
+<li>负责杂项太多</li>
+<li>因为专注度不够，所以不够用心，未思考如何做的更好</li>
+<li>极客上统计只有14小时，2021年是95小时，2020年是158小时。</li>
+<li>制定的很多计划没有完成，惰性太强</li>
 </ul>
-<p>Spring Context 中有  org.springframework.scripting.groovy.GroovyScriptFactory 类</p>
-<h2 id="3-参考"><a href="#3-参考" class="headerlink" title="3 参考"></a>3 参考</h2>
+<h1 id="2023年展望"><a href="#2023年展望" class="headerlink" title="2023年展望"></a>2023年展望</h1><p>【netty、数据结构、设计模式之美】</p>
+<p>希望自己更加专注地工作，竭尽全力、专心致志、全力以赴地完成既定任务项，有着稻盛和夫那样的工作态度。</p>
+<p>希望自己能够落实计划，制定计划后，必须逼迫自己完成，逼自己一把。</p>
+<p>希望自己每季度至少完成1次分享，1年至少4次。</p>
+<p>希望自己攻克数据结构（不能短时间提升），跳槽时有资本。</p>
+<p>希望自己继续学习netty，吃透netty，成为身边最了解netty，最了解网络编程的大牛。</p>
+<p>希望自己在数云能够评级到3级，工资提升2到5k。<br>    如果参与评级，我需要给ppt写足够多的亮点，当然这些亮点是公司层面较关注的。</p>
+<p>希望自己能够在个人技术博客上每月输出至少两篇文章。</p>
+<p>希望自己能够在工作上更加主动，更加积极地去协调各方，积极推动工作，这方面向随涛、方园、居安、汪小海学习。</p>
+<p>希望可以提升自己在工作上的表达沟通能力。</p>
+<p>向两位老师学习：<br>    1）专注地做好本职工作，在工作期间，不玩手机，不随意搜其他。   —— 稻盛和夫就是我的老师<br>    2）闲暇时间学技术，写技术文章。  —— 王争是我的老师，他是《设计模式之美》《数据结构与算法之美》的作者。<br>                                                                            《设计模式之美》11万+订阅，《数据结构与算法之美》26万＋订阅。算起来40万*100元=4千万。牛逼。</p>
+
       
        <hr><span style="font-style: italic;color: gray;"> 竭尽全力、专心致志、全神贯注的做好分内之事。 </span>
     </div>
